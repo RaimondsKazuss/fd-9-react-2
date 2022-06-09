@@ -1,26 +1,35 @@
-import React from "react";
-import logo from "./logo.svg";
-import "./App.css";
+import { useState } from "react";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Auth from "./components/Auth/Auth";
+import Footer from "./components/Footer/Footer";
+import Nav from "./components/Nav/Nav";
+import ModalContext from "./context/ModelContext";
+import GlobalStyle from "./GlobalStyle";
+import AllPosts from "./pages/AllPosts/AllPosts";
+import CreatePost from "./pages/CreatePost/CreatePost";
+import Home from "./pages/Home/Home";
+import NotFound from "./pages/NotFound/NotFound";
 
-function App() {
+const App: React.FC = () => {
+  const [isOpen, setIsOpen] = useState(false);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <GlobalStyle />
+      <ModalContext.Provider value={{ isOpen, setIsOpen }}>
+        <BrowserRouter>
+          <Nav />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route exact path="/all-posts" element={<AllPosts />} />
+            <Route exact path="/create" element={<CreatePost />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+          <Footer />
+          {isOpen && <Auth />}
+        </BrowserRouter>
+      </ModalContext.Provider>
+    </>
   );
-}
+};
 
 export default App;
